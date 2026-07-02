@@ -1,0 +1,27 @@
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+/**
+ * Protected route patterns.
+ * Any route matching these patterns requires an authenticated session.
+ * Unauthenticated requests are redirected to NEXT_PUBLIC_CLERK_SIGN_IN_URL.
+ */
+const isProtectedRoute = createRouteMatcher([
+  "/dashboard(.*)",
+  "/projects(.*)",
+  "/audits(.*)",
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
+});
+
+export const config = {
+  matcher: [
+    // Match all routes except static files and Next.js internals
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
+  ],
+};

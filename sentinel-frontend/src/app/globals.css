@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/*
+  Aegis AI Global Styles
+  Dark-mode-first design inspired by Linear, Cursor, and Vercel.
+  All color tokens are CSS custom properties consumed by Tailwind v4 via @theme.
+*/
+
+/* ── CSS Custom Properties (design tokens) ───────────────────────────────── */
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 95%;
+  --card: 240 8% 6%;
+  --card-foreground: 0 0% 95%;
+  --popover: 240 8% 6%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 252 87% 67%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 5% 13%;
+  --secondary-foreground: 0 0% 95%;
+  --muted: 240 5% 13%;
+  --muted-foreground: 240 5% 55%;
+  --accent: 240 5% 16%;
+  --accent-foreground: 0 0% 95%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5% 14%;
+  --input: 240 5% 14%;
+  --ring: 252 87% 67%;
+  --radius: 0.5rem;
+  --border-strong: 240 5% 20%;
+  --font-inter: "Inter", system-ui, sans-serif;
+}
+
+/* ── Tailwind v4 Theme Extensions ────────────────────────────────────────── */
+/* In Tailwind v4, @theme replaces tailwind.config.ts for design tokens. */
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+
+  /* Aegis severity colours */
+  --color-severity-critical: #ef4444;
+  --color-severity-high: #f97316;
+  --color-severity-medium: #eab308;
+  --color-severity-low: #22c55e;
+  --color-severity-info: #3b82f6;
+
+  /* Agent state colours */
+  --color-agent-pending: #6b7280;
+  --color-agent-running: #818cf8;
+  --color-agent-complete: #34d399;
+  --color-agent-failed: #f87171;
+  --color-agent-skipped: #fbbf24;
+
+  --font-sans: var(--font-inter);
+
+  /* Custom animations */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-pulse-slow: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ── Base Reset & Typography ─────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    color-scheme: dark;
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    min-height: 100dvh;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border-strong));
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(240 5% 30%); }
+}
+
+/* ── Aegis AI Utility Classes ─────────────────────────────────────────── */
+@layer utilities {
+  .glass-card {
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subtle glow for active/focus states */
+  .glow-primary {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.3),
+                0 0 20px hsl(var(--primary) / 0.1);
+  }
+
+  /* Severity colour helpers */
+  .severity-critical { color: #ef4444; }
+  .severity-high     { color: #f97316; }
+  .severity-medium   { color: #eab308; }
+  .severity-low      { color: #22c55e; }
+  .severity-info     { color: #3b82f6; }
+
+  /* Agent running pulse dot */
+  .agent-pulse::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #818cf8;
+    animation: pulse 1.5s ease-in-out infinite;
+    margin-right: 6px;
+  }
+}

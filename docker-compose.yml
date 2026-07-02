@@ -1,0 +1,105 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sentinel_postgres
+    environment:
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinel_dev
+      POSTGRES_DB: sentinel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel -d sentinel_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # ── Redis ────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: sentinel_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # ── Backend API ──────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./sentinel-backend
+      dockerfile: ../infrastructure/docker/Dockerfile.backend
+    container_name: sentinel_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      # Override with Docker service names for inter-container networking
+      DATABASE_URL: postgresql+asyncpg://sentinel:sentinel_dev@postgres:5432/sentinel_db
+      REDIS_URL: redis://redis:6379/0
+      PYTHONPATH: src
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Development: mount src for hot-reload; override CMD to use --reload
+    volumes:
+      - ./sentinel-backend/src:/app/src
+      - ./sentinel-backend/demo_repos:/app/demo_repos
+      - .:/app/workspace
+    command: uvicorn aegis.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  # ── Frontend ─────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: ./infrastructure/docker/Dockerfile.frontend
+    container_name: sentinel_frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ── ARQ Worker (added in Milestone 1) ─────────────────────────────────────
+  # worker:
+  #   build:
+  #     context: ./sentinel-backend
+  #     dockerfile: ../infrastructure/docker/Dockerfile.backend
+  #   container_name: sentinel_worker
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     DATABASE_URL: postgresql+asyncpg://sentinel:sentinel_dev@postgres:5432/sentinel_db
+  #     REDIS_URL: redis://redis:6379/0
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./sentinel-backend/src:/app/src
+  #   command: arq aegis.infrastructure.queue.worker.WorkerSettings
+  #   restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
