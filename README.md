@@ -14,11 +14,15 @@
   * ✅ M1.3: Repository Agent (Filesystem indexing)
   * ✅ M1.4: Agent Execution Infrastructure (In-memory engine, State Machine)
 * **Phase 2: Security & Analysis**
-  * ✅ M1.5: Security Analysis Agent (Static Rules Engine)
-  * ✅ M1.6: Execution API & Application Services
-  * ✅ M1.7: Frontend Dashboard Implementation
+  * ✅ M2.1: Security Analysis Agent (Deterministic Static Rules Engine)
+  * ✅ M2.2: Gemini AI Integration (Vulnerability Enhancement & Explanations)
+  * ✅ M2.3: Execution API & Application Services
 * **Phase 3: Remediation & Reporting**
-  * ✅ M1.8: Patch Generation Agent
+  * ✅ M3.1: Patch Generation Agent
+  * ✅ M3.2: PDF/JSON Report Generation
+* **Phase 4: Interface**
+  * ✅ M4.1: Full Premium Dashboard Implementation
+  * ✅ M4.2: Real-time Server-Sent Events (SSE) Synchronization
 
 **Aegis AI** runs a team of specialised AI agents that independently plan and execute a complete security audit — from vulnerability discovery through patch generation, validation, and professional report production.
 
@@ -157,11 +161,11 @@ aegis-ai/
 | Milestone | Status | Description |
 |---|---|---|
 | **M0** | ✅ Complete | Foundation: backend, frontend, DB, auth, Docker |
-| **M1** | 🔜 Next | Agent framework: ADK, Supervisor, Repo Agent, SSE |
-| **M2** | ⏳ Planned | Security analysis: Bandit, Semgrep, OSV |
-| **M3** | ⏳ Planned | Patch generation and approval flow |
-| **M5** | ⏳ Planned | PDF/JSON report generation |
-| **M6** | ⏳ Planned | Full premium dashboard |
+| **M1** | ✅ Complete | Agent framework: ADK, Supervisor, Repo Agent, SSE |
+| **M2** | ✅ Complete | Security analysis: Deterministic Rules & Gemini AI |
+| **M3** | ✅ Complete | Patch generation and approval flow |
+| **M5** | ✅ Complete | PDF/JSON report generation |
+| **M6** | ✅ Complete | Full premium dashboard with real-time SSE updates |
 
 ---
 
