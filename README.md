@@ -157,11 +157,11 @@ aegis-ai/
 | Milestone | Status | Description |
 |---|---|---|
 | **M0** | ✅ Complete | Foundation: backend, frontend, DB, auth, Docker |
-| **M1** | 🔜 Next | Agent framework: ADK, Supervisor, Repo Agent, SSE |
-| **M2** | ⏳ Planned | Security analysis: Bandit, Semgrep, OSV |
-| **M3** | ⏳ Planned | Patch generation and approval flow |
-| **M5** | ⏳ Planned | PDF/JSON report generation |
-| **M6** | ⏳ Planned | Full premium dashboard |
+| **M1** | ✅ Complete | Agent framework: ADK, Supervisor, Repo Agent, SSE |
+| **M2** | ✅ Complete | Security analysis: Deterministic Rules & Gemini AI |
+| **M3** | ✅ Complete | Patch generation and approval flow |
+| **M5** | ✅ Complete | PDF/JSON report generation |
+| **M6** | ✅ Complete | Full premium dashboard with real-time SSE updates |
 
 ---
 
