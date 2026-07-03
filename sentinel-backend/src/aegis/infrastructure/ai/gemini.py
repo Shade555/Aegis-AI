@@ -80,7 +80,11 @@ class MockGeminiService(GeminiService):
         """Return a dummy structured response."""
 
         # Simple heuristic to determine which mock to return
-        if "executive summary" in prompt.lower():
+        if "chat" in prompt.lower() or "assistant" in prompt.lower():
+            return {
+                "reply": "Based on the security scan, I recommend prioritizing the CRITICAL and HIGH severity vulnerabilities immediately to prevent potential exploitation."
+            }
+        elif "executive summary" in prompt.lower():
             return {
                 "overall_health": "Good",
                 "major_risks": ["Mocked Risk 1"],
@@ -93,10 +97,6 @@ class MockGeminiService(GeminiService):
                 "why_preferred": "This approach leverages built-in framework security features rather than relying on custom, error-prone manual escaping.",
                 "alternative_approaches": "An alternative would be strict input validation using regex, but parameterization provides a more robust defense-in-depth strategy.",
                 "possible_trade_offs": "There are no significant performance trade-offs. The code becomes slightly more strict but infinitely more secure.",
-            }
-        elif "chat" in prompt.lower() or "assistant" in prompt.lower():
-            return {
-                "reply": "Based on the security scan, I recommend prioritizing the CRITICAL and HIGH severity vulnerabilities immediately to prevent potential exploitation."
             }
         else:
             import re

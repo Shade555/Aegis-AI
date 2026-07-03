@@ -330,9 +330,14 @@ def chat_with_assistant(
 
     from aegis.config import settings
     from aegis.infrastructure.ai.gemini import GoogleGeminiService, MockGeminiService
+    from pydantic import BaseModel
+
+    class ChatResponseSchema(BaseModel):
+        reply: str
+
     ai_service = GoogleGeminiService() if settings.gemini_api_key else MockGeminiService()
     try:
-        response_data = ai_service.generate_json(prompt)
+        response_data = ai_service.generate_json(prompt, schema=ChatResponseSchema)
         return {"reply": response_data.get("reply", "I'm sorry, I could not generate a response.")}
     except Exception as e:
         return {"reply": f"AI service is currently unavailable: {str(e)}"}
